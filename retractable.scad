@@ -54,9 +54,12 @@ module retractable(height,tunnel,foot_thickness) {
     }
     translate([-19, 0, height/2+6]) rotate([0, 15, 0])
       cube([20, 20, height], center=true);
+    // Wrench tunnel
     cylinder(r=tunnel/2+extra_radius, h=3*height, center=true, $fn=12);
+    // Wrench head groove
     translate([0, -6, height-1])
-      cube([tunnel-0.5, 12, height], center=true);
+      cube([tunnel-0.5, 12, height-9], center=true);
+    // Wrench head shelf
     rotate([0, 0, 30]) translate([0, -6, 3*height/2-4])
       cube([tunnel, 12, height], center=true);
     // Safety needle M2.5 screw hole
