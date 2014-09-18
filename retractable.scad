@@ -80,7 +80,7 @@ module retractable(height,tunnel,foot_thickness) {
       % microswitch();
       for (x = [-9.5/2, 9.5/2]) {
         translate([x, 0, 0]) rotate([90, 0, 0])
-          cylinder(r=2.5/2, h=40, center=true, $fn=12);
+          cylinder(r=2.5/2, h=(x>0?11:40), center=true, $fn=12);
       }
     }
   }
