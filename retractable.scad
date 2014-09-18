@@ -6,6 +6,8 @@ height = 36;
 tunnel = 3.3;
 face_offset = 4;
 
+epsilon = 0.0001;
+
 module foot(thickness) {
   difference() {
     translate([12.5, 0, 0]) rotate([0, 0, -60])
@@ -14,7 +16,9 @@ module foot(thickness) {
         translate([10, 0, 0])
           cube([20, 10, thickness], center=true);
     }
-    translate([0, -10, 0])
+    // epsilon below to create slight overlap between feet
+    // avoids "not a 2-manifold" error.
+    translate([0, -10-epsilon, 0])
       cube([40, 20, 20], center=true);
     translate([12.5, 0, 0]) {
       // Space for bowden push fit connector.
