@@ -59,11 +59,13 @@ module retractable(height,tunnel,foot_thickness) {
       cube([tunnel-0.5, 12, height], center=true);
     rotate([0, 0, 30]) translate([0, -6, 3*height/2-4])
       cube([tunnel, 12, height], center=true);
-    // Safety needle spring.
+    // Safety needle M2.5 screw hole
     translate([-4.5, 0, height-11]) rotate([90, 0, 0])
       cylinder(r=2.5/2, h=40, center=true, $fn=12);
-    translate([-4, 0, height-2]) rotate([90, 0, 0])
-      cylinder(r=1/2, h=40, center=true, $fn=12);
+    // Safety needle pinhole
+    translate([-4, -face_offset, height-2]) rotate([90, 0, 0])
+      cylinder(r=1/2, h=10, center=true, $fn=12);
+    // Hole for strain relief M3 screw
     translate([-4.5, 6-8, foot_thickness+5]) rotate([-90, 0, 0])
       cylinder(r=1.5, h=40, center=false, $fn=12);
     // Effector screw heads.
