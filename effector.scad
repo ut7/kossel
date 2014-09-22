@@ -37,7 +37,7 @@ module effector() {
       }
     }
     translate([0, 0, push_fit_height-height/2])
-      cylinder(r=hotend_radius, h=height, $fn=36);
+      cylinder(r=hotend_radius + extra_radius, h=height, $fn=36);
     translate([0, 0, -6]) cylinder(r=4, h=height);
     for (a = [0:60:359]) rotate([0, 0, a]) {
       if (a != probe_angle)
