@@ -2,7 +2,7 @@ include <configuration.scad>;
 
 use <microswitch.scad>;
 
-height = 36;
+height = 41;
 tunnel = 3.3;
 face_offset = 4;
 
