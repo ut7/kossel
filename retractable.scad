@@ -3,7 +3,6 @@ include <configuration.scad>;
 use <microswitch.scad>;
 
 height = 41;
-tunnel = 3.3;
 face_offset = 4;
 
 epsilon = 0.0001;
@@ -30,7 +29,7 @@ module foot(thickness) {
     }
   }
 }
-module retractable(height,tunnel,foot_thickness) {
+module retractable(height,tunnel_radius,foot_thickness) {
   difference() {
     union() {
       translate([0, 0, height/2])
@@ -55,13 +54,13 @@ module retractable(height,tunnel,foot_thickness) {
     translate([-19, 0, height/2+6]) rotate([0, 15, 0])
       cube([20, 20, height], center=true);
     // Wrench tunnel
-    cylinder(r=tunnel/2+extra_radius, h=3*height, center=true, $fn=12);
+    cylinder(r=tunnel_radius, h=3*height, center=true, $fn=12);
     // Wrench head groove
     translate([0, -6, height-1])
-      cube([tunnel-0.5, 12, height-9], center=true);
+      cube([2*tunnel_radius, 12, height-9], center=true);
     // Wrench head shelf
     rotate([0, 0, 30]) translate([0, -6, 3*height/2-4])
-      cube([tunnel, 12, height], center=true);
+      cube([2*tunnel_radius, 12, height], center=true);
     // Safety needle M2.5 screw hole
     translate([-4.5, 0, height-11]) rotate([90, 0, 0])
       cylinder(r=2.5/2, h=40, center=true, $fn=12);
@@ -89,4 +88,4 @@ module retractable(height,tunnel,foot_thickness) {
   }
 }
 
-retractable(height,tunnel,4);
+retractable(height,probe_tunnel_radius,foot_thickness=4);
