@@ -27,3 +27,4 @@ motor_offset = 44;
 motor_length = 47;
 
 probe_tunnel_radius = 1.25 + extra_radius;
+probe_excentricity = 5;

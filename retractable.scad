@@ -44,7 +44,7 @@ module retractable(height,tunnel_radius,foot_thickness) {
       translate([-3, -3, height/2])
         cube([18, 6, height], center=true);
       // Feet for vertical M3 screw attachment.
-      translate([0,5,0]) {
+      translate([0,probe_excentricity,0]) {
         rotate([0, 0, 90]) {
           foot(foot_thickness);
           scale([1, -1, 1]) foot(foot_thickness);

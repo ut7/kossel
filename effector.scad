@@ -9,6 +9,9 @@ height = 8;
 cone_r1 = 2.5;
 cone_r2 = 14;
 
+probe_angle = 60; // angle where the Z-probe goes through effector
+
+
 module effector() {
   difference() {
     union() {
@@ -37,8 +40,13 @@ module effector() {
       cylinder(r=hotend_radius, h=height, $fn=36);
     translate([0, 0, -6]) cylinder(r=4, h=height);
     for (a = [0:60:359]) rotate([0, 0, a]) {
-      translate([0, mount_radius, 0])
-	cylinder(r=m3_wide_radius, h=2*height, center=true, $fn=12);
+      if (a != probe_angle)
+        translate([0, mount_radius, 0])
+          cylinder(r=m3_wide_radius, h=2*height, center=true, $fn=12);
+    }
+    rotate([0, 0, probe_angle]) {
+      translate([0, mount_radius+probe_excentricity, 0])
+	cylinder(r=probe_tunnel_radius+0.1, h=2*height, center=true, $fn=12);
     }
   }
 }
