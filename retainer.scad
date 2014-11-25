@@ -40,4 +40,5 @@ module retainer() {
 }
 
 translate([0, 0, height/2])
+rotate([180,0,0])
   retainer();
