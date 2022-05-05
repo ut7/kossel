@@ -1,4 +1,5 @@
 include <configuration.scad>;
+use <retainer.scad>
 
 separation = 40;  // Distance between ball joint mounting faces.
 offset = 20;  // Same as DELTA_EFFECTOR_OFFSET in Marlin.
@@ -54,4 +55,94 @@ module effector() {
   }
 }
 
+module e3dv6() {
+    translate([0, 0, -17.66])
+    rotate([90, 0, 0])
+    color("lightgrey")
+    import("E3D_V6_1.75mm_Universal_HotEnd_Mockup.stl");
+}
+
+module pen() {
+    color("grey")
+    hull() {
+        cylinder(h=140, d=10, $fn=32);
+        translate([0, 0, 150])
+        sphere(d=1);
+    }
+}
+
+module pen_plate() {
+    difference() {
+        union() {
+            hull() for(x=[-1,1]) for(z=[-1,1])
+            translate([x*11, -11, z*11])
+            rotate([90, 0, 0])
+            cylinder(h=4, d=4, $fn=16, center = true);
+        }
+
+        // pen plate holes
+        for(x=[-1,1]) for(z=[-1,1])
+            translate([x*9, -10, z*9])
+            rotate([90, 0, 0])
+            cylinder(r=m3_radius, h=10, center=true, $fn=12);
+        
+        // pen recess
+        translate([0, -18, 0])
+        cylinder(h=50, d=14, $fn=32, center=true);
+    }
+}
+
+module pen_holder() {
+    difference() {
+        union() {
+            // holder body
+            hull() for(x=[-1,1]) for(z=[-1,1])
+            translate([x*4, 1, z*6.5+1])
+            rotate([90, 0, 0])
+            cylinder(d=3, h=24, center=true, $fn=16);
+        }
+
+        // space for effector body
+        translate([0, 20, 0])
+        cylinder(r=offset-3+0.1, h=height, center=true, $fn=60);
+        
+        // space for effector screws
+        hull() for(y=[0,5])
+        translate([0, y, 0])
+        rotate([0, 90, 0])
+        cylinder(d=4, h=20, $fn=16, center=true);
+        
+        // vertical screw hole
+        translate([0, 7.5, 0]) {
+            cylinder(r=m3_radius, h=30, center=true, $fn=12);
+            translate([0, 0, 6.5])
+            cylinder(r=m3_nut_radius, h=4, center=false, $fn=6);
+        }
+
+    }
+
+    pen_plate();
+}
+
 translate([0, 0, height/2]) effector();
+translate([0, 0, 8])
+rotate([180, 0, 0]) {
+    e3dv6();
+    translate([0, 0, -2.6])
+    retainer();
+}
+
+
+!translate([0, -20, 4]) {
+    color("green") {
+        translate([0, 0, 0]) 
+        pen_holder();
+
+        translate([0, -32, 0])
+        rotate([0, 0, 180])
+        pen_plate();
+    }
+
+    translate([0, -16, -74])
+    pen();
+}
