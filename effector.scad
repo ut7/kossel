@@ -97,7 +97,7 @@ module pen_holder() {
         union() {
             // holder body
             hull() for(x=[-1,1]) for(z=[-1,1])
-            translate([x*4, 1, z*6.5+1])
+            translate([x*4.4, 1, z*6.5+1])
             rotate([90, 0, 0])
             cylinder(d=3, h=24, center=true, $fn=16);
         }
