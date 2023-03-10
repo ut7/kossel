@@ -71,7 +71,7 @@ module pen() {
     }
 }
 
-module pen_plate() {
+module pen_plate(extra_hole_radius = 0) {
     difference() {
         union() {
             hull() for(x=[-1,1]) for(z=[-1,1])
@@ -84,7 +84,7 @@ module pen_plate() {
         for(x=[-1,1]) for(z=[-1,1])
             translate([x*9, -10, z*9])
             rotate([90, 0, 0])
-            cylinder(r=m3_radius, h=10, center=true, $fn=12);
+            cylinder(r=m3_radius + extra_hole_radius, h=10, center=true, $fn=12);
         
         // pen recess
         translate([0, -18, 0])
@@ -93,13 +93,15 @@ module pen_plate() {
 }
 
 module pen_holder() {
+    effector_clearance = 0;
     difference() {
         union() {
             // holder body
             hull() for(x=[-1,1]) for(z=[-1,1])
             translate([x*4.4, 1, z*6.5+1])
             rotate([90, 0, 0])
-            cylinder(d=3, h=24, center=true, $fn=16);
+            translate([0, 0, -12])
+            cylinder(d=3, h=21+effector_clearance, center=false, $fn=16);
         }
 
         // space for effector body
@@ -114,18 +116,23 @@ module pen_holder() {
         
         // vertical screw hole
         translate([0, 7.5, 0]) {
-            cylinder(r=m3_radius, h=30, center=true, $fn=12);
+            cylinder(r=m3_radius + 0.1, h=30, center=true, $fn=12);
             translate([0, 0, 6.5])
             cylinder(r=m3_nut_radius, h=4, center=false, $fn=6);
         }
 
     }
 
+    translate([0, 3 - effector_clearance, 0])
     pen_plate();
 }
 
-translate([0, 0, height/2]) effector();
-translate([0, 0, 8])
+module clamping_pen_plate() {
+    pen_plate(extra_hole_radius = .1);
+}
+
+%translate([0, 0, height/2]) effector();
+%translate([0, 0, 8])
 rotate([180, 0, 0]) {
     e3dv6();
     translate([0, 0, -2.6])
@@ -133,16 +140,30 @@ rotate([180, 0, 0]) {
 }
 
 
-!translate([0, -20, 4]) {
+translate([0, -20, 4]) {
     color("green") {
         translate([0, 0, 0]) 
         pen_holder();
 
-        translate([0, -32, 0])
+        translate([0, -29, 0])
         rotate([0, 0, 180])
-        pen_plate();
+        clamping_pen_plate();
     }
 
-    translate([0, -16, -74])
+    translate([0, -13, -74])
     pen();
 }
+
+use <threads.scad>
+
+module threadtest() {
+        ScrewThread(outer_diam=30, height=10);
+    
+//    translate([0, 0, 50])
+    ScrewHole(outer_diam=30, height=10) {
+        cylinder(d=40, h=10, center=false, $fn=32);
+    
+    }
+}
+
+*!threadtest();
