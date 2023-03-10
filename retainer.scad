@@ -17,13 +17,14 @@ module retainer() {
   difference() {
     union() {
       cylinder(r=offset-3, h=height, center=true, $fn=60);
-      rotate([0, 0, probe_angle]) {
+      *rotate([0, 0, probe_angle]) {
         translate([0, mount_radius+probe_excentricity, 0])
           cylinder(r=probe_tunnel_radius*3, h=height, center=true, $fn=12);
       }
     }
     cylinder(r=groove_radius + extra_radius, h=height+1, center=true);
-    for (a = [0:60:359]) if (a != probe_angle) rotate([0, 0, a]) {
+    for (a = [0:60:359]) //if (a != probe_angle) 
+    rotate([0, 0, a]) {
       translate([0, mount_radius, 0]) {
         translate([0,0,-height/2 - 0.01]) {
            nut_slot();
@@ -31,7 +32,7 @@ module retainer() {
         }
       }
     }
-    rotate([0, 0, probe_angle]) {
+    *rotate([0, 0, probe_angle]) {
       translate([0, mount_radius+probe_excentricity, 0])
         union() {
           cylinder(r=probe_tunnel_radius, h=2*height, center=true, $fn=12);
