@@ -2,11 +2,15 @@ include <configuration.scad>;
 use <frame_top.scad>;
 
 glass_radius = 170.5/2;
+bed_inner_radius = 180.4;
+bed_thickness = 2;
+glass_thickness = 3;
+
 
 module beam(length) {
     scale([length,1,1])
     rotate([0,90,0])
-    import("openbeam.stl");
+    import("reference/openbeam.stl");
 }
 
 
@@ -22,10 +26,9 @@ module corner_and_beam() {
 }
 
 module hotbed() {
-    bed_inner_radius = 180.4;
     d = bed_inner_radius/cos(30)/2 - 7.501;
     color("purple")
-    linear_extrude(2)
+    linear_extrude(bed_thickness)
     difference() {
         hull() {
             for(a=[0:60:360])
@@ -48,8 +51,7 @@ module hotbed() {
 
 module glass() {
     color("grey", alpha=0.5)
-    linear_extrude(3)
-    circle(r=glass_radius, $fn=128);
+    cylinder(h=glass_thickness, r=glass_radius, $fn=128);
 }
 
 module printer_bottom() {
@@ -67,7 +69,7 @@ module printer_bottom() {
 module glass_tab() {
   rotate([0,0,90])
   difference() {
-    linear_extrude(6) {
+    linear_extrude(6, convexity=5) {
         difference() {
       
             hull() {
@@ -76,32 +78,43 @@ module glass_tab() {
                 circle(d=3, $fn=32);
 
                 for(x=[-1,1])
-                translate([x*16,6.5,0])
+                translate([x*17,8,0])
                 circle(d=3, $fn=32);
             }
-            
-            
-            translate([0, glass_radius + 6.555, 0])
-            circle(r=glass_radius+0.1, $fn=128);
-
-            hull() {
-                  for(y=[1,-3])
-                  translate([0,y])
-                  circle(r=m3_wide_radius, $fn=32);
-              }
         }
     }
+
+    translate([0, glass_radius + 6.555, 0])
+    cylinder(r=glass_radius+0.1, h=glass_thickness+bed_thickness+0.001, $fn=128);
+
+    screw_ys = [1,-3];
+    screw_depth = 3;
+    sacrificial_bridge_height = 0.15;
+    
+    union() {
+
+        hull() {
+            for(y=screw_ys) {
+                translate([0, y, screw_depth])
+                cylinder(h=5, r=m3_washer_radius, $fn=32);
+            }
+        }
+        hull() {
+            for(y=screw_ys) {
+                translate([0, y, -0.001])
+                cylinder(h=screw_depth - sacrificial_bridge_height, r=m3_wide_radius, $fn=32);
+            }
+        }
+    }
+    
+    translate([-40, 0, -0.01])
+    cube([80, 20, bed_thickness+0.5+0.01]);
       
-    translate([0,10,0])
-    cube([80,20,3.8], center=true);
-      
-    translate([11.5,.5,5])
+    translate([10.5, 1, 5])
     rotate([0,0,64])
     scale(.5)
     scale([1,1,10])
-         import("logo_ut7_fixed.stl");
-
-      
+         import("reference/logo_ut7_fixed.stl", convexity=5);
   } 
 }
 
