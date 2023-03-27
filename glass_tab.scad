@@ -41,7 +41,7 @@ module hotbed() {
     
     for(a=[0:60:360])
     rotate([0,0,a])
-    translate([-12,d*sqrt(3)/2+4, 2.5])
+    translate([-20,d*sqrt(3)/2+4, 2.5])
     color("black")
     cube([3,1.5,1], center=true);
 }
@@ -76,7 +76,7 @@ module glass_tab() {
                 circle(d=3, $fn=32);
 
                 for(x=[-1,1])
-                translate([x*30,10,0])
+                translate([x*16,6.5,0])
                 circle(d=3, $fn=32);
             }
             
@@ -85,18 +85,18 @@ module glass_tab() {
             circle(r=glass_radius+0.1, $fn=128);
 
             hull() {
-                  for(y=[0,-2])
+                  for(y=[1,-3])
                   translate([0,y])
                   circle(r=m3_wide_radius, $fn=32);
               }
         }
     }
       
-    translate([0,11,0])
-    cube([80,20,4], center=true);
+    translate([0,10,0])
+    cube([80,20,3.8], center=true);
       
-    translate([14,1.5,5.5])
-    rotate([0,0,38.7])
+    translate([11.5,.5,5])
+    rotate([0,0,64])
     scale(.5)
     scale([1,1,10])
          import("logo_ut7_fixed.stl");
@@ -113,7 +113,7 @@ module glass_tabs() {
 }
 
 printer_bottom();
-%glass_tabs();
+glass_tabs();
 
-*rotate([180,0,0])
+!rotate([180,0,0])
 glass_tab();
