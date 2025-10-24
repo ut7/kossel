@@ -1,4 +1,5 @@
-include <configuration.scad>;
+include <configuration.scad>
+use <retainer.scad>
 
 separation = 40;  // Distance between ball joint mounting faces.
 offset = 20;  // Same as DELTA_EFFECTOR_OFFSET in Marlin.
@@ -52,6 +53,21 @@ module effector() {
         cylinder(r=probe_tunnel_radius+0.1, h=2*height, center=true, $fn=12);
     }
   }
+}
+
+module e3dv6() {
+    translate([0, 0, -17.66])
+    rotate([90, 0, 0])
+    color("lightgrey")
+    import("reference/E3D_V6_1.75mm_Universal_HotEnd_Mockup.stl");
+}
+
+
+%translate([0, 0, 8])
+rotate([180, 0, 0]) {
+    e3dv6();
+    translate([0, 0, -2.6])
+    retainer();
 }
 
 translate([0, 0, height/2]) effector();
