@@ -60,6 +60,11 @@ module e3dv6() {
     rotate([90, 0, 0])
     color("lightgrey")
     import("reference/E3D_V6_1.75mm_Universal_HotEnd_Mockup.stl");
+
+    // silicone sock
+    color("blue", alpha=0.5)
+    translate([-16,-8.5,-53.2])
+    cube([21,17,12.5]);
 }
 
 
